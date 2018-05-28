@@ -20,6 +20,7 @@ var Api = /** @class */ (function () {
     }
     Api.prototype.init = function () {
         this.router.get("/", apiController.welcomeApi);
+        this.router.post("/login", apiController.login);
     };
     return Api;
 }());

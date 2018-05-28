@@ -13,6 +13,7 @@ class Api {
   }
   private init():void {
     this.router.get("/", apiController.welcomeApi);
+    this.router.post("/login", apiController.login);
   }
 }
 
