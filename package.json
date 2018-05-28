@@ -1,0 +1,27 @@
+{
+  "name": "hackerbay-backend-task",
+  "version": "1.0.0",
+  "description": "A stateless microservice in Node, which implements Authentication, JSON patching and Image Thumbnail Generation.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioedeveloper/hackerbay-backend-task.git"
+  },
+  "keywords": [
+    "hackerbay",
+    "ioedeveloper",
+    "node",
+    "micro-service",
+    "jwt",
+    "authentication"
+  ],
+  "author": "@ioedeveloper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ioedeveloper/hackerbay-backend-task/issues"
+  },
+  "homepage": "https://github.com/ioedeveloper/hackerbay-backend-task#readme"
+}
