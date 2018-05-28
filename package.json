@@ -2,9 +2,10 @@
   "name": "hackerbay-backend-task",
   "version": "1.0.0",
   "description": "A stateless microservice in Node, which implements Authentication, JSON patching and Image Thumbnail Generation.",
-  "main": "app.js",
+  "main": ".dist/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node dist/app.js"
   },
   "repository": {
     "type": "git",
