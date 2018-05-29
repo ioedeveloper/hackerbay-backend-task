@@ -42,7 +42,7 @@ exports.login = (req, res) => {
 exports.apply = (req, res) => {
     jwt.verify(req.body.token, "hackerbay", (err, authData) => {
         if (err) {
-            return res.status(403).send();
+            return res.status(403);
         }
         else {
             // map json request body to view model.
@@ -67,6 +67,6 @@ exports.verifyToken = (req, res, next) => {
     }
     else {
         // forbidden
-        return res.status(403).send();
+        return res.status(403);
     }
 };
