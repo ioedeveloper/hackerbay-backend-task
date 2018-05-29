@@ -16,9 +16,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jwt = __importStar(require("jsonwebtoken"));
+const jsonPatch = __importStar(require("json-patch"));
 const apiViewModels = __importStar(require("../view_models/api"));
 /**
- * Get All Leaves
  * @param req
  * @param res
  */
@@ -26,17 +26,29 @@ exports.welcomeApi = (req, res) => __awaiter(this, void 0, void 0, function* () 
     let viewresult = {
         message: "Welcome To My App"
     };
-    return res.status(200).send(viewresult);
+    return res.status(200).type("application/json").send(viewresult);
 });
 exports.login = (req, res) => {
-    //test user
-    let user = new apiViewModels.User(req.body.username, req.body.password);
+    //map test user to view model
+    let user = new apiViewModels.UserData(req.body.username, req.body.password);
+    //sign user with jwt token
     jwt.sign({ user }, "hackerbay", (err, token) => {
         let viewresult = {
             token
         };
         return res.status(200).type("application/json").send(viewresult);
     });
+};
+exports.apply = (req, res) => {
+    // map json request body to view model.
+    let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
+    let jsonObj = jsonObjectData.jsonObject;
+    let jsonPatchObj = jsonObjectData.jsonPatchObject;
+    //apply json patch to document
+    jsonPatch.apply(jsonObj, jsonPatchObj);
+    let viewresult = jsonPatch.compile(jsonPatchObj);
+    //send response
+    return res.status(200).type("application/json").send(viewresult);
 };
 let verifyToken = (req, res, next) => {
 };

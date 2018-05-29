@@ -21,6 +21,7 @@ class Api {
     init() {
         this.router.get("/", apiController.welcomeApi);
         this.router.post("/login", apiController.login);
+        this.router.patch("/apply", apiController.apply);
     }
 }
 const apiRoutes = new Api();

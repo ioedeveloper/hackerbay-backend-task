@@ -1,0 +1,7 @@
+[
+    {
+        "op": "add",
+        "path": "/baz/0/foo", 
+        "value": "world"
+    }
+]

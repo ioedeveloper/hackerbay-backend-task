@@ -1,7 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class User {
+//view model for user data
+class UserData {
     constructor(username, role) {
+        this.username = username;
+        this.role = role;
     }
 }
-exports.User = User;
+exports.UserData = UserData;
+//view model for Json Object Data
+class JsonObjectData {
+    constructor(jsonObject, jsonPatchObject) {
+        this.jsonObject = jsonObject;
+        this.jsonPatchObject = jsonPatchObject;
+    }
+}
+exports.JsonObjectData = JsonObjectData;
