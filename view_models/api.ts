@@ -7,7 +7,7 @@ export class UserData{
 
 //view model for Json Object Data
 export class JsonObjectData{
-    constructor(public jsonObject:JSON, public jsonPatchObject:any){
+    constructor(public jsonObject:any, public jsonPatchObject:any){
 
     }
 }

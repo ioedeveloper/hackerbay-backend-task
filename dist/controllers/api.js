@@ -40,15 +40,33 @@ exports.login = (req, res) => {
     });
 };
 exports.apply = (req, res) => {
-    // map json request body to view model.
-    let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
-    let jsonObj = jsonObjectData.jsonObject;
-    let jsonPatchObj = jsonObjectData.jsonPatchObject;
-    //apply json patch to document
-    jsonPatch.apply(jsonObj, jsonPatchObj);
-    let viewresult = jsonPatch.compile(jsonPatchObj);
-    //send response
-    return res.status(200).type("application/json").send(viewresult);
+    jwt.verify(req.body.token, "hackerbay", (err, authData) => {
+        if (err) {
+            return res.status(403).send();
+        }
+        else {
+            // map json request body to view model.
+            let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
+            let jsonObj = jsonObjectData.jsonObject;
+            let jsonPatchObj = jsonObjectData.jsonPatchObject;
+            //apply json patch to document
+            jsonPatch.apply(jsonObj, jsonPatchObj);
+            let viewresult = jsonPatch.compile(jsonPatchObj);
+            //send response
+            return res.status(200).type("application/json").send(viewresult);
+        }
+    });
 };
-let verifyToken = (req, res, next) => {
+exports.verifyToken = (req, res, next) => {
+    const bearerHeader = req.headers['authorization'];
+    if (typeof bearerHeader !== "undefined") {
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.body.token = bearerToken;
+        next();
+    }
+    else {
+        // forbidden
+        return res.status(403).send();
+    }
 };

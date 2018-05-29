@@ -28,19 +28,34 @@ export let login:any = (req: Request, res:Response) => {
 };
 
 export let apply:any = (req:Request, res:Response) => {
-    // map json request body to view model.
-    let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
-    let jsonObj = jsonObjectData.jsonObject;
-    let jsonPatchObj = jsonObjectData.jsonPatchObject;
+    jwt.verify(req.body.token, "hackerbay", (err:any, authData:any) =>{
+        if(err){
+            return res.status(403);
+        }else{
+            // map json request body to view model.
+            let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
+            let jsonObj = jsonObjectData.jsonObject;
+            let jsonPatchObj = jsonObjectData.jsonPatchObject;
 
-    //apply json patch to document
-    jsonPatch.apply(jsonObj, jsonPatchObj);
-    let viewresult = jsonPatch.compile(jsonPatchObj);
+            //apply json patch to document
+            jsonPatch.apply(jsonObj, jsonPatchObj);
+            let viewresult = jsonPatch.compile(jsonPatchObj);
 
-    //send response
-    return res.status(200).type("application/json").send(viewresult);
+            //send response
+            return res.status(200).type("application/json").send(viewresult);
+        }
+    });
 };
 
-let verifyToken = (req:Request, res:Request, next:NextFunction) =>{
-
+export let verifyToken = (req:Request, res:Response, next:NextFunction) =>{
+    const bearerHeader = req.headers['authorization'];
+    if(typeof  bearerHeader !== "undefined"){
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.body.token = bearerToken;
+        next();
+    }else{
+        // forbidden
+        return res.status(403);
+    }
 };
