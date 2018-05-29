@@ -6,7 +6,3 @@ Typescript, Node, JWT
 
 # IDE
 Visual Studio Code
-
-# Inspiration/Motivation
-I wrote this piece of code to answer a question asked on Quora.
-I hope it helps others also.
