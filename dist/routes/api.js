@@ -8,21 +8,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // importing libraries and dependencies
-var express_1 = require("express");
-var apiController = __importStar(require("../controllers/api"));
+const express_1 = require("express");
+const apiController = __importStar(require("../controllers/api"));
 /**
  * Handles routing of all api request
  */
-var Api = /** @class */ (function () {
-    function Api() {
+class Api {
+    constructor() {
         this.router = express_1.Router();
         this.init();
     }
-    Api.prototype.init = function () {
+    init() {
         this.router.get("/", apiController.welcomeApi);
         this.router.post("/login", apiController.login);
-    };
-    return Api;
-}());
-var apiRoutes = new Api();
+    }
+}
+const apiRoutes = new Api();
 exports.apiRoutes = apiRoutes;

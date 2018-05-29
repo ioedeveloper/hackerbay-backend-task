@@ -2,7 +2,7 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import * as apiRoutes from "./routes/api";
 
-const app: express.Application = express();
+const app:express.Application = express();
 const port:any = process.env.PORT || 8001;
 
 app.use(bodyParser.json());

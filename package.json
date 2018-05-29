@@ -28,9 +28,11 @@
   "dependencies": {
     "@types/body-parser": "^1.17.0",
     "@types/express": "^4.11.1",
+    "@types/json-patch": "0.0.30",
     "@types/jsonwebtoken": "^7.2.7",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "json-patch": "^0.7.0",
     "jsonwebtoken": "^8.2.1"
   }
 }
