@@ -30,7 +30,7 @@ export let login:any = (req: Request, res:Response) => {
 export let apply:any = (req:Request, res:Response) => {
     jwt.verify(req.body.token, "hackerbay", (err:any, authData:any) =>{
         if(err){
-            return res.status(403);
+            return res.status(403).send();
         }else{
             // map json request body to view model.
             let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
@@ -56,6 +56,6 @@ export let verifyToken = (req:Request, res:Response, next:NextFunction) =>{
         next();
     }else{
         // forbidden
-        return res.status(403);
+        return res.status(403).send();
     }
 };
