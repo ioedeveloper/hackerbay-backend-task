@@ -14,15 +14,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jwt = __importStar(require("jsonwebtoken"));
 const jsonPatch = __importStar(require("json-patch"));
-const imageDownloader = require('image-downloader');
-const gm_1 = __importDefault(require("gm"));
 const apiViewModels = __importStar(require("../view_models/api"));
+const imageService = __importStar(require("../services/imageService"));
+const jsonWebTokenService = __importStar(require("../services/jsonWebTokenService"));
 /**
  * @param req
  * @param res
@@ -36,78 +32,30 @@ exports.welcomeApi = (req, res) => __awaiter(this, void 0, void 0, function* () 
 exports.login = (req, res) => {
     //map test user to view model
     let user = new apiViewModels.UserData(req.body.username, req.body.password);
-    //sign user with jwt token
-    jwt.sign({ user }, "hackerbay", (err, token) => {
-        let viewresult = {
-            token
-        };
+    let webTokenObj = new jsonWebTokenService.JsonWebToken();
+    webTokenObj.signUser(user).then((viewresult) => {
         return res.status(200).type("application/json").send(viewresult);
+    }, (err) => {
+        return res.status(200).type("application/json").send(err);
     });
 };
 exports.createThumbnail = (req, res) => {
     console.log(req.body.publicimageurl);
     let url = new apiViewModels.CreateThumbnail(req.body.publicimageurl);
-    const options = {
-        url: url.publicImageUrl,
-        dest: 'images'
-    };
-    downloadIMG(options).then((filepath) => {
-        console.log(filepath);
-        let imageMagick = gm_1.default.subClass({ imageMagick: true });
-        imageMagick(filepath).resize(50, 50).write('./tmp.png', (err) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.sendFile('./tmp.png');
-            }
-        });
+    let imgObj = new imageService.DownloadImage();
+    imgObj.download(url.options).then((filepath) => {
         // Delete the temporary file that we created in the cropping task
         //fs.unlinkSync('./tmp.png'); 
     }).catch((err) => {
         return res.status(400).send({ error: err });
     });
 };
-function downloadIMG(options) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const { filename, image } = yield imageDownloader.image(options);
-            return filename;
-        }
-        catch (e) {
-            throw e;
-        }
-    });
-}
 exports.applyJsonPatch = (req, res) => {
     // map json request body to view model.
     let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
-    let jsonObj = jsonObjectData.jsonObject;
-    let jsonPatchObj = jsonObjectData.jsonPatchObject;
     //apply json patch to document
-    jsonPatch.apply(jsonObj, jsonPatchObj);
-    let viewresult = jsonPatch.compile(jsonPatchObj);
+    jsonPatch.apply(jsonObjectData.jsonObject, jsonObjectData.jsonPatchObject);
+    let viewresult = jsonPatch.compile(jsonObjectData.jsonPatchObject);
     //send response
     return res.status(200).type("application/json").send(viewresult);
-};
-exports.verifyToken = (req, res, next) => {
-    //get to from headers['authorization']
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader !== "undefined") {
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.body.token = bearerToken;
-        jwt.verify(req.body.token, "hackerbay", (err, authData) => {
-            if (err) {
-                return res.status(403).send();
-            }
-            else {
-                next();
-            }
-        });
-    }
-    else {
-        // forbidden
-        return res.status(403).send();
-    }
 };

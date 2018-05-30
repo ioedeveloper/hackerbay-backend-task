@@ -8,6 +8,7 @@ import * as jsonWebTokenService from "../services/jsonWebTokenService";
  */
 class Api {
   public router: Router;
+  public webTokenObj = new jsonWebTokenService.JsonWebToken();
   public constructor() {
     this.router = Router();
     this.init();
@@ -15,8 +16,8 @@ class Api {
   private init():void {
     this.router.get("/", apiController.welcomeApi);
     this.router.post("/login", apiController.login);
-    this.router.patch("/applyJsonPatch", jsonWebTokenService.verifyToken, apiController.applyJsonPatch);
-    this.router.post("/createthumbnail", jsonWebTokenService.verifyToken, apiController.createThumbnail);
+    this.router.patch("/applyjsonpatch", this.webTokenObj.verifyToken, apiController.applyJsonPatch);
+    this.router.post("/createthumbnail", this.webTokenObj.verifyToken, apiController.createThumbnail);
   }
 }
 

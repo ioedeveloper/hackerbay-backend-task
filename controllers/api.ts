@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response, ErrorRequestHandler } from "express";
 import * as jsonPatch from "json-patch";
 import * as fs from "fs";
-import gm from "gm";
 import * as apiViewModels from "../view_models/api";
-import * as thumbnailService from "../services/createThumbnailService";
+import * as imageService from "../services/imageService";
 import * as jsonWebTokenService from "../services/jsonWebTokenService";
 
 /**
@@ -20,23 +19,20 @@ export let welcomeApi:any = async (req: Request, res: Response) => {
 export let login:any = (req: Request, res:Response) => {
     //map test user to view model
     let user = new apiViewModels.UserData(req.body.username, req.body.password);
-    let viewresult = jsonWebTokenService.signUser(user);
-    return res.status(200).type("application/json").send(viewresult);
+    let webTokenObj = new jsonWebTokenService.JsonWebToken();
+    webTokenObj.signUser(user).then((viewresult) => {
+        return res.status(200).type("application/json").send(viewresult);
+    }, (err)=>{
+        return res.status(200).type("application/json").send(err);
+    });
 };
 
 export let createThumbnail:any = (req:Request, res:Response) => {
     console.log(req.body.publicimageurl);
     let url = new apiViewModels.CreateThumbnail(req.body.publicimageurl);
-    thumbnailService.downloadIMG(url.options).then((filepath)=>{
-        console.log(filepath);
-        let imageMagick = gm.subClass({imageMagick: true});
-        imageMagick(filepath).resize(50, 50).write('./tmp.png', (err) => {
-            if (err) {
-                console.log(err); 
-            } else {
-                res.sendFile('./tmp.png');
-            }
-        });
+    let imgObj = new imageService.DownloadImage();
+    imgObj.download(url.options).then((filepath)=>{
+        
         // Delete the temporary file that we created in the cropping task
         //fs.unlinkSync('./tmp.png'); 
     }).catch((err)=>{

@@ -19,6 +19,8 @@ exports.JsonObjectData = JsonObjectData;
 class CreateThumbnail {
     constructor(publicImageUrl) {
         this.publicImageUrl = publicImageUrl;
+        this.options = { url: "", dest: "images" };
+        this.options.url = this.publicImageUrl;
     }
 }
 exports.CreateThumbnail = CreateThumbnail;
