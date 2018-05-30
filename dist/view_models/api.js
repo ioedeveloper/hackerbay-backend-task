@@ -16,3 +16,9 @@ class JsonObjectData {
     }
 }
 exports.JsonObjectData = JsonObjectData;
+class CreateThumbnail {
+    constructor(publicImageUrl) {
+        this.publicImageUrl = publicImageUrl;
+    }
+}
+exports.CreateThumbnail = CreateThumbnail;

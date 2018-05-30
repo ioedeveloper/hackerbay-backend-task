@@ -11,3 +11,9 @@ export class JsonObjectData{
 
     }
 }
+
+export class CreateThumbnail{
+    constructor(public publicImageUrl:string){
+
+    }
+}
