@@ -13,7 +13,8 @@ export class JsonObjectData{
 }
 
 export class CreateThumbnail{
+    public options = {url:"", dest:"images"};
     constructor(public publicImageUrl:string){
-
+        this.options.url = this.publicImageUrl;
     }
 }
