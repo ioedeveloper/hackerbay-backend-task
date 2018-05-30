@@ -43,11 +43,16 @@ exports.createThumbnail = (req, res) => {
     console.log(req.body.publicimageurl);
     let url = new apiViewModels.CreateThumbnail(req.body.publicimageurl);
     let imgObj = new imageService.DownloadImage();
+    let thumbnailObj = new imageService.Thumbnail();
     imgObj.download(url.options).then((filepath) => {
-        // Delete the temporary file that we created in the cropping task
-        //fs.unlinkSync('./tmp.png'); 
+        thumbnailObj.generateThumbnail(filepath, './tmp.jpg').then((img) => {
+            //return res.status(200).sendFile(path.join(__dirname, '../../', img));
+            return res.status(200).sendFile(img);
+        }).catch((err) => {
+            return res.status(200).send({ error: err });
+        });
     }).catch((err) => {
-        return res.status(400).send({ error: err });
+        return res.status(200).send({ error: err });
     });
 };
 exports.applyJsonPatch = (req, res) => {
