@@ -1,9 +1,6 @@
-process.env.NODE_ENV = "test";
-import * as chai from "chai";
+import { expect, assert} from "chai";
 import * as app from "../app";
-const should = chai.should();
-
-chai.use(require("chai-http"));
+import * as request from "supertest";
 
 describe('Api Requests Tests', () => {
 
@@ -28,17 +25,40 @@ describe('Api Requests Tests', () => {
             username: "ioedeveloper",
             password: "hackerbay"
         }
-        chai.request(app)
+        let authenticatedUser = request.agent(app);
+        before((done)=>{
+            authenticatedUser
             .post('/login')
             .send(user)
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('username');
-                res.body.should.have.property('password');
-              done();
+            .end((err, response)=>{
+                expect(response.status).to.equal(200);
+                done();
             });
+            done();
+        });
+            done();
       });
 
   });
+
+  describe('/POST createthumbnail', () => {
+    it('it should POST a public url image', (done) => {
+      let image = {
+          publicimageurl: "https://i.imgur.com/nQo9kLG.jpg"
+      }
+      let authenticatedUser = request.agent(app);
+      before((done)=>{
+          authenticatedUser
+          .post('/createthumbnail')
+          .send(image)
+          .end((err, response)=>{
+              expect(response.status).to.equal(200);
+              done();
+          });
+          done();
+      });
+          done();
+    });
+
+});
 });

@@ -3,7 +3,7 @@ import { Thumbnail } from "../services/imageService";
 import { expect, assert, should } from "chai";
 import "mocha";
 
-describe("downloadImage function", () => {
+describe("Download Image function", () => {
 // create app db connection.
     it("should return downloaded image file path", () => {
         const dImage = new DownloadImage();
@@ -16,7 +16,7 @@ describe("downloadImage function", () => {
             // assert or Expect
             expect(res).to.be.a("string");
         }).catch((err)=>{
-            expect(err).to.be.eql("Image download failed");
+            expect(err).to.be.eql("Error locating image");
         });
     });
 });
@@ -33,7 +33,7 @@ describe("Generate Thumbnail function", () => {
                 expect(res).to.be.a("string");
             }).catch((err)=>{
                 // assert or Expect
-                expect(err).to.be.a("string");
+                expect(err).to.be.eql("Error locating image");
             });
         });
     

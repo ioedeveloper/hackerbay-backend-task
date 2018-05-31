@@ -27,7 +27,7 @@ class DownloadImage {
                 return filename;
             }
             catch (e) {
-                return "Image download failed";
+                return "Error locating image";
             }
         });
     }
@@ -38,10 +38,15 @@ class Thumbnail {
     }
     generateThumbnail(imageSrc, destPath) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield jimp.read(imageSrc).then((image) => {
-                image.resize(50, 50).write(destPath);
-            });
-            return destPath;
+            try {
+                yield jimp.read(imageSrc).then((image) => {
+                    image.resize(50, 50).write(destPath);
+                });
+                return destPath;
+            }
+            catch (e) {
+                return "Error locating image";
+            }
         });
     }
 }

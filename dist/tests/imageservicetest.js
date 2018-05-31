@@ -4,7 +4,7 @@ const imageService_1 = require("../services/imageService");
 const imageService_2 = require("../services/imageService");
 const chai_1 = require("chai");
 require("mocha");
-describe("downloadImage function", () => {
+describe("Download Image function", () => {
     // create app db connection.
     it("should return downloaded image file path", () => {
         const dImage = new imageService_1.DownloadImage();
@@ -17,7 +17,7 @@ describe("downloadImage function", () => {
             // assert or Expect
             chai_1.expect(res).to.be.a("string");
         }).catch((err) => {
-            chai_1.expect(err).to.be.eql("Image download failed");
+            chai_1.expect(err).to.be.eql("Error locating image");
         });
     });
 });
@@ -33,7 +33,7 @@ describe("Generate Thumbnail function", () => {
             chai_1.expect(res).to.be.a("string");
         }).catch((err) => {
             // assert or Expect
-            chai_1.expect(err).to.be.a("string");
+            chai_1.expect(err).to.be.eql("Error locating image");
         });
     });
 });

@@ -7,11 +7,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-process.env.NODE_ENV = "test";
-const chai = __importStar(require("chai"));
+const chai_1 = require("chai");
 const app = __importStar(require("../app"));
-const should = chai.should();
-chai.use(require("chai-http"));
+const request = __importStar(require("supertest"));
 describe('Api Requests Tests', () => {
     //   describe('/GET book', () => {
     //       it('it should GET all the books', (done) => {
@@ -34,16 +32,37 @@ describe('Api Requests Tests', () => {
                 username: "ioedeveloper",
                 password: "hackerbay"
             };
-            chai.request(app)
-                .post('/login')
-                .send(user)
-                .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('username');
-                res.body.should.have.property('password');
+            let authenticatedUser = request.agent(app);
+            before((done) => {
+                authenticatedUser
+                    .post('/login')
+                    .send(user)
+                    .end((err, response) => {
+                    chai_1.expect(response.status).to.equal(200);
+                    done();
+                });
                 done();
             });
+            done();
+        });
+    });
+    describe('/POST createthumbnail', () => {
+        it('it should POST a public url image', (done) => {
+            let image = {
+                publicimageurl: "https://i.imgur.com/nQo9kLG.jpg"
+            };
+            let authenticatedUser = request.agent(app);
+            before((done) => {
+                authenticatedUser
+                    .post('/createthumbnail')
+                    .send(image)
+                    .end((err, response) => {
+                    chai_1.expect(response.status).to.equal(200);
+                    done();
+                });
+                done();
+            });
+            done();
         });
     });
 });
