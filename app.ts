@@ -14,3 +14,5 @@ app.listen(port, () => {
     // success callback
     console.log(`Listening at http://localhost:${port}/`);
 });
+
+export {app}
