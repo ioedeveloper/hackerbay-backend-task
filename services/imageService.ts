@@ -22,7 +22,7 @@ class Thumbnail{
   }
   public async generateThumbnail(imageSrc:string, destPath:string){
       await jimp.read(imageSrc).then((image)=>{
-        image.resize(50,50).write(destPath)
+        image.resize(50,50).write(destPath);
       });
       return destPath;
   }

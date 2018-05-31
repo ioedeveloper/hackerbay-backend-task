@@ -4,6 +4,7 @@ import * as jsonPatch from "json-patch";
 import * as apiViewModels from "../view_models/api";
 import * as imageService from "../services/imageService";
 import * as jsonWebTokenService from "../services/jsonWebTokenService";
+import * as jsonPatchService from "../services/jsonPatchService";
 
 /**
  * @param req
@@ -17,9 +18,11 @@ export let welcomeApi:any = async (req: Request, res: Response) => {
 };
 
 export let login:any = (req: Request, res:Response) => {
-    //map test user to view model
+    // map test user to view model
     let user = new apiViewModels.UserData(req.body.username, req.body.password);
+    // instantiate webTokenService
     let webTokenObj = new jsonWebTokenService.JsonWebToken();
+    // sign new test user
     webTokenObj.signUser(user).then((viewresult) => {
         return res.status(200).type("application/json").send(viewresult);
     }, (err)=>{
@@ -28,17 +31,20 @@ export let login:any = (req: Request, res:Response) => {
 };
 
 export let createThumbnail:any = (req:Request, res:Response) => {
-    console.log(req.body.publicimageurl);
     let url = new apiViewModels.CreateThumbnail(req.body.publicimageurl);
     let imgObj = new imageService.DownloadImage();
     let thumbnailObj = new imageService.Thumbnail();
+
+    //Downloads image from test url
     imgObj.download(url.options).then((filepath)=>{
+
+        //Generate a 50px by 50px thumbnail
         thumbnailObj.generateThumbnail(filepath, './tmp.jpg').then((img)=>{
-            //return res.status(200).sendFile(path.join(__dirname, '../../', img));
-            return res.status(200).sendFile(img);
+        return res.status(200).send({"image":path.join(__dirname, '../../.', img)});
         }).catch((err)=>{
             return res.status(200).send({error:err});
         });
+
     }).catch((err)=>{
         return res.status(200).send({error:err});
     });
@@ -46,12 +52,8 @@ export let createThumbnail:any = (req:Request, res:Response) => {
 
 export let applyJsonPatch:any = (req:Request, res:Response) => {
             // map json request body to view model.
-            let jsonObjectData = new apiViewModels.JsonObjectData(req.body.jsonObject, req.body.jsonPatchObject);
-
-            //apply json patch to document
-            jsonPatch.apply(jsonObjectData.jsonObject, jsonObjectData.jsonPatchObject);
-            let viewresult = jsonPatch.compile(jsonObjectData.jsonPatchObject);
-
-            //send response
+            let jsonObjData = new apiViewModels.JsonObjectData(req.body.jsonDocument, req.body.jsonPatchObject);
+            let jsonPatchObj = new jsonPatchService.JsonPatch();
+            let viewresult = jsonPatchObj.applyPatch(req.body.jsonDocument, req.body.jsonPatchObject)
             return res.status(200).type("application/json").send(viewresult);
 };
