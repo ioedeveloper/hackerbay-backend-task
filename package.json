@@ -34,6 +34,7 @@
     "@types/json-patch": "0.0.30",
     "@types/jsonwebtoken": "^7.2.7",
     "@types/mocha": "^5.2.0",
+    "@types/supertest": "^2.0.4",
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",
     "express": "^4.16.3",
@@ -44,6 +45,8 @@
     "json-patch": "^0.7.0",
     "jsonwebtoken": "^8.2.1",
     "mocha": "^5.2.0",
+    "request": "^2.78.0",
+    "supertest": "^2.0.1",
     "ts-node": "^6.0.5",
     "typescript": "^2.8.4"
   }

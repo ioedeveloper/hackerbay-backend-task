@@ -6,7 +6,7 @@ class DownloadImage{
 
     }
 
-    public async download(options: { url: string; dest: string; }) {
+    public async download(options: { url: string; dest: string; }):Promise<string> {
         try {
           const { filename, image } = await imageDownloader.image(options);
           return filename;

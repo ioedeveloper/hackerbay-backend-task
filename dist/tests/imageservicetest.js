@@ -1,27 +1,40 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const imageService_1 = require("../services/imageService");
+const imageService_2 = require("../services/imageService");
 const chai_1 = require("chai");
 require("mocha");
 describe("downloadImage function", () => {
     // create app db connection.
-    it("should return downloaded image file path", () => __awaiter(this, void 0, void 0, function* () {
+    it("should return downloaded image file path", () => {
         const dImage = new imageService_1.DownloadImage();
         const options = {
             url: "https://i.imgur.com/nQo9kLG.jpg",
             dest: "./images"
         };
         // act
-        const result = yield dImage.download(options);
-        // assert or Expect
-        chai_1.assert.isString(result);
-    }));
+        dImage.download(options).then((res) => {
+            // assert or Expect
+            chai_1.expect(res).to.be.a("string");
+        }).catch((err) => {
+            // assert or Expect
+            chai_1.expect(err).to.be.an("Object");
+        });
+    });
+});
+describe("Generate Thumbnail function", () => {
+    // create app db connection.
+    it("should return file path to generated thumbnail", () => {
+        const thumbnailImage = new imageService_2.Thumbnail();
+        const imagePath = "https://i.imgur.com/nQo9kLG.jpg";
+        const destPath = "./images";
+        // act
+        thumbnailImage.generateThumbnail(imagePath, destPath).then((res) => {
+            // assert or Expect
+            chai_1.expect(res).to.be.a("string");
+        }).catch((err) => {
+            // assert or Expect
+            chai_1.expect(err).to.be.a("string");
+        });
+    });
 });
