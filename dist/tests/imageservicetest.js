@@ -17,8 +17,7 @@ describe("downloadImage function", () => {
             // assert or Expect
             chai_1.expect(res).to.be.a("string");
         }).catch((err) => {
-            // assert or Expect
-            chai_1.expect(err).to.be.an("Object");
+            chai_1.expect(err).to.be.eql("Image download failed");
         });
     });
 });

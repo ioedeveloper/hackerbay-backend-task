@@ -1,44 +1,41 @@
 process.env.NODE_ENV = "test";
 import * as chai from "chai";
-import chaiHttp = require("chai-http");
 import * as app from "../app";
 const should = chai.should();
 
-chai.use(chaiHttp);
+chai.use(require("chai-http"));
 
-describe('Books', () => {
+describe('Api Requests Tests', () => {
 
-  describe('/GET book', () => {
-      it('it should GET all the books', (done) => {
-        chai.request(app)
-            .get('/book')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('array');
-                res.body.length.should.be.eql(0);
-              done();
-            });
-      });
-  });
+//   describe('/GET book', () => {
+//       it('it should GET all the books', (done) => {
+//         chai.request(app)
+//             .get('/book')
+//             .end((err, res) => {
+//                 res.should.have.status(200);
+//                 res.body.should.be.a('array');
+//                 res.body.length.should.be.eql(0);
+//               done();
+//             });
+//       });
+//   });
   /*
   * Test the /POST route
   */
-  describe('/POST book', () => {
-      it('it should not POST a book without pages field', (done) => {
-        let book = {
-            title: "The Lord of the Rings",
-            author: "J.R.R. Tolkien",
-            year: 1954
+  describe('/POST login', () => {
+      it('it should POST a username and password', (done) => {
+        let user = {
+            username: "ioedeveloper",
+            password: "hackerbay"
         }
         chai.request(app)
-            .post('/book')
-            .send(book)
+            .post('/login')
+            .send(user)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
-                res.body.should.have.property('errors');
-                res.body.errors.should.have.property('pages');
-                res.body.errors.pages.should.have.property('kind').eql('required');
+                res.body.should.have.property('username');
+                res.body.should.have.property('password');
               done();
             });
       });

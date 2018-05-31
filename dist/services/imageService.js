@@ -27,7 +27,7 @@ class DownloadImage {
                 return filename;
             }
             catch (e) {
-                throw e;
+                return "Image download failed";
             }
         });
     }

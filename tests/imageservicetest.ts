@@ -1,6 +1,6 @@
 import { DownloadImage } from "../services/imageService";
 import { Thumbnail } from "../services/imageService";
-import { expect, assert } from "chai";
+import { expect, assert, should } from "chai";
 import "mocha";
 
 describe("downloadImage function", () => {
@@ -16,8 +16,7 @@ describe("downloadImage function", () => {
             // assert or Expect
             expect(res).to.be.a("string");
         }).catch((err)=>{
-            // assert or Expect
-            expect(err).to.be.an("Object");
+            expect(err).to.be.eql("Image download failed");
         });
     });
 });
